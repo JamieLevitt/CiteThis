@@ -1,3 +1,8 @@
+from os.path import join, dirname
+
+from dotenv import load_dotenv
+load_dotenv(dirname(__main__), ".env")
+
 class data_config:
     db_name = "citethis"
     db_user = "administrator"
