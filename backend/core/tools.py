@@ -1,7 +1,7 @@
 from structs.data import TrendStruct, EntityStruct, ArticleStruct
 
 from data.collection import get_trends_raw
-from data.processing import process_trend, process_articles
+from data.processing import process_trend, process_articles, process_post
 
 def update_trends():
     raw_trends = get_trends_raw()
@@ -20,3 +20,6 @@ def purge_dead_entries():
     TrendStruct.purge_db()
     EntityStruct.purge_db()
     ArticleStruct.purge_db()
+
+def analyse_post(post_body:str) -> str:
+    return process_post(post_body)
