@@ -35,7 +35,8 @@ class DataStruct:
         except: return None
         
         if len(raw) == 0: return None
-        return cls(*raw[0])
+        resp = cls(*raw[0])
+        return resp
 
     @classmethod
     def load_all_from_db(cls:Type[D]) -> list[D]:
@@ -112,15 +113,19 @@ class TrendStruct(DataStruct):
     articles : list[ArticleStruct] = None
     
     @staticmethod
-    def load_all_with_entities() -> list[TrendStruct]:
-        return [TrendStruct(
-                    trend.id, trend.started_trending,
-                    TrendStruct.get_topic_entities(trend.id),
-                    TrendStruct.get_topic_articles(trend.id)
-                ) for trend in TrendStruct.load_all_from_db()]
+    def load_all_with_meta() -> dict:
+        return { trend.id: {
+                            "keywords": [keyword for entity in
+                                            TrendStruct.get_topic_entities(trend.id)
+                                                 for keyword in entity.keywords],
+                            "wikis": [entity.wiki_url
+                                        for entity in TrendStruct.get_topic_entities(trend.id)],
+                            "articles": TrendStruct.get_topic_articles(trend.id)
+                        }
+                    for trend in TrendStruct.load_all_from_db()}
 
     @staticmethod
-    def get_topic_entities(topic_id:str) -> list[str]:
+    def get_topic_entities(topic_id:str) -> list[EntityStruct]:
         ids = [id[0] for id in fetch_entry(config.trend_entity_link_table,
                                                 "entity_id",
                                                 "topic_id", (topic_id,))]

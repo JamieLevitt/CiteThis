@@ -1,14 +1,16 @@
 from .collection import (get_trend_entities_raw,
                             get_entity_data_raw, get_trend_articles_raw)
 
+from .aitools.post_analysis import tag_post_body
+
 from structs.data import TrendStruct, EntityStruct, ArticleStruct
 
 from core.config import collection_config as config
 
 def __process_entities(trend_id:str) -> list[EntityStruct]:
     entity_raws = get_trend_entities_raw(trend_id)
+    res = []
     if entity_raws is not None:
-        res = []
         for entity in entity_raws:
             if not EntityStruct.is_in_db(entity):
                 meta_raw = get_entity_data_raw(entity)
@@ -32,7 +34,7 @@ def __process_entities(trend_id:str) -> list[EntityStruct]:
                 res.append(struct)
             else:
                 res.append(EntityStruct.load_from_db(entity["name"]))
-    else: res = None          
+                     
     return res
 
 from datetime import datetime
@@ -40,8 +42,8 @@ from zoneinfo import ZoneInfo
 
 def process_articles(trend_id:str) -> list[ArticleStruct]:
     articles_raw = get_trend_articles_raw(trend_id)
+    res = []
     if articles_raw is not None:
-        res = []
         for article in articles_raw:
             url = article["url"].removeprefix("https://")
             if not ArticleStruct.is_in_db(url):
@@ -71,4 +73,5 @@ def process_trend(trend_raw:dict):
     for article in articles: struct.affirm_db_article_link(article.id)
 
 def process_post(post_body:str) -> str: 
-    pass #to be implemented
+    trends_meta = TrendStruct.load_all_with_meta()
+    topics, tagged = tag_post_body(trends_meta)

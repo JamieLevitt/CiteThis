@@ -1,12 +1,13 @@
+import os
 from os.path import join, dirname
 
-from dotenv import load_dotenv
-load_dotenv(dirname(__main__), ".env")
+#from dotenv import load_dotenv
+#load_dotenv(dirname("__main__"), ".env")
 
 class data_config:
     db_name = "citethis"
     db_user = "administrator"
-    db_pass = os.environ.get("DB_PASSWORD")
+    db_pass = "xEfhWGPDQltjeGoZJjuu" #os.environ.get("DB_PASSWORD")
     db_host = "citethis-db.cbsiwywwk6pc.ap-southeast-2.rds.amazonaws.com"
     db_port = "5432"
 
@@ -26,12 +27,12 @@ class data_config:
     entity_lifespan = 61 #days (2 months)
 
 class collection_config:
-    news_api_key = os.environ.get("NEWS_API_KEY")
-    google_genai_key = os.environ.get("GOOGLE_GENAI_KEY")
+    news_api_key = "pub_7338657c5b399dcf95c5a24c0230a517587f9" #os.environ.get("NEWS_API_KEY")
+    google_genai_key = "AIzaSyAHP4udsHwqXQZJ7O-ilz6QfdL3Nx1ea2o" #os.environ.get("GOOGLE_GENAI_KEY")
 
     fetch_trends_url = "https://trends.google.com/trending?geo=US&hl=en-US&category=14&hours=48"
 
-    trends_count = 1
+    trends_count = 2
     trend_load_wait_time = 30 #seconds
 
     # news_sources = {
@@ -49,6 +50,10 @@ class collection_config:
     trends_container_tag = "cC57zf"
     trend_name_tag = "mZ3RIc"
     trend_started_tag = "vdw3Ld"
+
+    selenium_args = ["--disable-gpu"]
+
+    # options.add_argument("--headless")
 
     news_raw_dt_format = "%Y-%m-%d %H:%M:%S"
         

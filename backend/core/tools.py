@@ -6,8 +6,6 @@ from data.processing import process_trend, process_articles, process_post
 def update_trends():
     raw_trends = get_trends_raw()
     for raw in raw_trends:
-        print(raw)
-        print(TrendStruct.is_in_db(raw["name"]))
         if not TrendStruct.is_in_db(raw["name"]):
             process_trend(raw)
 

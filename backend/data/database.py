@@ -7,13 +7,15 @@ import sys
 
 def db_conn():
     try:
-        return psycopg2.connect(
+        conn = psycopg2.connect(
             database = config.db_name,
             user = config.db_user,
             password = config.db_pass,
             host = config.db_host,
             port = config.db_port
             )
+        conn.autocommit = True
+        return conn
     except psycopg2.OperationalError as e:
         print("error")
 

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import current_app
 from datetime import datetime, timezone, timedelta
 def server_time() -> datetime:
         return datetime.now(timezone.utc)
@@ -15,31 +15,32 @@ from .config import data_config as config
 import inspect
 
 class ServerManager:
-    def __init__(self): pass
+    def __init__(self): self.i = 0
 
     @staticmethod
     def load_topics() -> list[TrendStruct]:
         return TrendStruct.load_all_from_db()
-
-    def main_loop(self, app:Flask):
+    
+    def main_loop(self):
         try:
+            print("hi")
             i = 0
             while True:
-                self.process_queue()
-                app.logger.info(f"loop {i}")
-                i +=1
-                time.sleep(5)
+                print(i)
+                i += 1
+                self.__process_queue()
+                time.sleep(1)
         except KeyboardInterrupt:
             return
-    
-    def process_queue(self):
+        
+    def __process_queue(self):
         for method in self.queuemethods: 
             method()
 
-    @QueueMethod(lambda x: x <= server_time() - timedelta(hours = config.trends_fetch_pause))
-    def _update_trends(self):
-        print("updating trends")
-        update_trends()
+    # @QueueMethod(lambda x: x <= server_time() - timedelta(hours = config.trends_fetch_pause))
+    # def _update_trends(self):
+    #     print("updating trends")
+    #     update_trends()
 
     @QueueMethod(lambda x: x <= server_time() - timedelta(hours = config.news_fetch_pause))
     def _update_articles(self):

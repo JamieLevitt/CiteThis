@@ -1,11 +1,12 @@
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 
 from data.aitools import AiRequest
-from data.aitools.functions import GetTrendEntities, GetEntityMetadata
+from data.aitools.google_genai_funcs import GetTrendEntities, GetEntityMetadata
 
 from . import news_api
 
@@ -14,7 +15,11 @@ from core.config import collection_config as config
 def get_trends_raw():
     url = config.fetch_trends_url
 
-    driver = webdriver.Firefox()
+    opts = Options()
+    for arg in config.selenium_args:
+        opts.add_argument(arg)
+
+    driver = webdriver.Firefox(options = opts)
     driver.get(url)
     
     try:
@@ -34,7 +39,7 @@ def get_trends_raw():
     times = [time.text for time in soup.find_all("div", class_ = config.trend_started_tag)]
     list_len = config.trends_count
     return [{"name": name, "started_label": time_label}
-                for name, time_label in zip(names[:list_len], times[:list_len])]
+                for name, time_label in zip(names[1:list_len], times[1:list_len])]
 
 def get_trend_entities_raw(trend_id:str) -> dict:
     req = AiRequest(GetTrendEntities(trend_id))
