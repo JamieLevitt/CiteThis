@@ -4,18 +4,24 @@ from os.path import join, dirname
 #from dotenv import load_dotenv
 #load_dotenv(dirname("__main__"), ".env")
 
-class data_config:
-    db_name = "citethis"
-    db_user = "administrator"
-    db_pass = "xEfhWGPDQltjeGoZJjuu" #os.environ.get("DB_PASSWORD")
-    db_host = "citethis-db.cbsiwywwk6pc.ap-southeast-2.rds.amazonaws.com"
-    db_port = "5432"
+class db_config:
+    host = "35.244.83.45"#"citethis:australia-southeast1:citethis-db"
+    user = "postgres"
+    password = "K36A8`*GLQy>i)gp" #os.environ.get("DB_PASSWORD")
+    name = "postgres"
 
     trends_table = "trending_topics"
     entities_table = "entities"
     articles_table = "articles"
     trend_entity_link_table = "links_trending_topics_to_entities"
     trend_article_link_table = "links_trending_topics_to_article_urls"
+
+class data_config:
+    # db_name = "citethis"
+    # db_user = "administrator"
+    # db_pass = "xEfhWGPDQltjeGoZJjuu" #os.environ.get("DB_PASSWORD")
+    # db_host = "citethis-db.cbsiwywwk6pc.ap-southeast-2.rds.amazonaws.com"
+    # db_port = "5432"
 
     trends_fetch_pause = 30 #minutes
     news_fetch_pause = 12 #hours
@@ -32,7 +38,7 @@ class collection_config:
 
     fetch_trends_url = "https://trends.google.com/trending?geo=US&hl=en-US&category=14&hours=48"
 
-    trends_count = 2
+    trends_count = 1
     trend_load_wait_time = 30 #seconds
 
     # news_sources = {
@@ -47,13 +53,8 @@ class collection_config:
 
     excluded_news_sources = "indiatoday.in" #Non-US sources API considers to be US Sources
     
-    trends_container_tag = "cC57zf"
-    trend_name_tag = "mZ3RIc"
-    trend_started_tag = "vdw3Ld"
-
-    selenium_args = ["--disable-gpu"]
-
-    # options.add_argument("--headless")
+    trend_name_selector = "div.mZ3RIc"
+    trend_started_selector = "div.vdw3Ld"
 
     news_raw_dt_format = "%Y-%m-%d %H:%M:%S"
         

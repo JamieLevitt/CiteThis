@@ -1,4 +1,9 @@
-from pyppeteer import launch
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup
 
 from data.aitools import AiRequest
 from data.aitools.google_genai_funcs import GetTrendEntities, GetEntityMetadata
@@ -7,38 +12,34 @@ from . import news_api
 
 from core.config import collection_config as config
 
-async def get_trends_raw():
-    browser = await launch(
-        handleSIGINT=False,
-        handleSIGTERM=False,
-        handleSIGHUP=False,
-        headless=True,
-        args=['--no-sandbox', '--disable-setuid-sandbox']
-    )
-    page = await browser.newPage()
+def get_trends_raw():
+    url = config.fetch_trends_url
+
+    opts = Options()
+    for arg in config.selenium_args:
+        opts.add_argument(arg)
+
+    driver = webdriver.Firefox(options = opts)
+    driver.get(url)
     
-    # Navigate to the Google Trends page
-    await page.goto(config.fetch_trends_url)
-    
-    # Wait until topic elements are loaded
-    await page.waitForSelector(config.trend_name_selector)
-    await page.waitForSelector(config.trend_started_selector)
-    
-    trends = await page.evaluate(f"""
-        (trendNameSelector, trendStartedSelector) => {{
-            // Get all trend names and started texts using the provided selectors
-            const topics = Array.from(document.querySelectorAll(trendNameSelector)).map(el => el.innerText.trim());
-            const starteds = Array.from(document.querySelectorAll(trendStartedSelector)).map(el => el.innerText.trim());
-        
-            // Combine the topics and started values
-            return topics.map((topic, index) => ({'''{
-                topic,
-                started_label: starteds[index] || ''
-            }'''}));
-        }}""", config.trend_name_selector, config.trend_started_selector)
-    
-    await browser.close()
-    return trends[:config.trends_count]
+    try:
+        trends_container = WebDriverWait(driver, config.trend_load_wait_time).until(
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR,
+                        f"[jsname='{config.trends_container_tag}']")) #wait for trends to load
+        )
+    except Exception as e:
+        driver.quit()
+        return None
+
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+    driver.quit()
+
+    names = [trend.text for trend in soup.find_all("div", class_ = config.trend_name_tag)]
+    times = [time.text for time in soup.find_all("div", class_ = config.trend_started_tag)]
+    list_len = config.trends_count
+    return [{"name": name, "started_label": time_label}
+                for name, time_label in zip(names[1:list_len], times[1:list_len])]
 
 def get_trend_entities_raw(trend_id:str) -> dict:
     req = AiRequest(GetTrendEntities(trend_id))

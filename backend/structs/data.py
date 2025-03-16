@@ -4,10 +4,11 @@ from typing import TypeVar, Type
 from data.database import insert_entry, fetch_entry, delete_entry
 
 from core.server import server_time
+from core.config import db_config as db_config
 from core.config import data_config as config
 
-from datetime import date, datetime, timedelta
-from dataclasses import dataclass, fields
+from datetime import date, timedelta
+from dataclasses import dataclass, fields, asdict
 
 D = TypeVar('D', bound='DataStruct')
 
@@ -74,7 +75,7 @@ class DataStruct:
 
 @dataclass
 class EntityStruct(DataStruct):
-    table = config.entities_table
+    table = db_config.entities_table
     id_alias = "id"
     excluded_fields = []
 
@@ -88,7 +89,7 @@ class EntityStruct(DataStruct):
 
 @dataclass
 class ArticleStruct(DataStruct):
-    table = config.articles_table
+    table = db_config.articles_table
     id_alias = "url"
     excluded_fields = []
 
@@ -101,7 +102,7 @@ class ArticleStruct(DataStruct):
 
 @dataclass
 class TrendStruct(DataStruct):
-    table = config.trends_table
+    table = db_config.trends_table
     id_alias = "topic"
     excluded_fields = ["entities", "articles"]
 
@@ -113,28 +114,24 @@ class TrendStruct(DataStruct):
     articles : list[ArticleStruct] = None
     
     @staticmethod
-    def load_all_with_meta() -> dict:
+    def load_all_with_kw() -> dict:
         return { trend.id: {
-                            "keywords": [keyword for entity in
-                                            TrendStruct.get_topic_entities(trend.id)
-                                                 for keyword in entity.keywords],
-                            "wikis": [entity.wiki_url
-                                        for entity in TrendStruct.get_topic_entities(trend.id)],
-                            "articles": TrendStruct.get_topic_articles(trend.id)
-                        }
+                    "keywords": [keyword for entity in
+                                    TrendStruct.get_topic_entities(trend.id)
+                                        for keyword in entity.keywords]}
                     for trend in TrendStruct.load_all_from_db()}
 
     @staticmethod
     def get_topic_entities(topic_id:str) -> list[EntityStruct]:
-        ids = [id[0] for id in fetch_entry(config.trend_entity_link_table,
+        ids = [id[0] for id in fetch_entry(db_config.trend_entity_link_table,
                                                 "entity_id",
                                                 "topic_id", (topic_id,))]
         
         return [EntityStruct.load_from_db(entity_id) for entity_id in ids]
     
     @staticmethod
-    def get_topic_articles(topic_id:str) -> list[str]:
-        ids = [id[0] for id in fetch_entry(config.trend_article_link_table,
+    def get_topic_articles(topic_id:str) -> list[ArticleStruct]:
+        ids = [id[0] for id in fetch_entry(db_config.trend_article_link_table,
                                     "article_url",
                                     "topic_id", (topic_id,))]
         
@@ -142,13 +139,13 @@ class TrendStruct(DataStruct):
     
     def affirm_db_entity_link(self, entity_id:str):
         if entity_id not in self.get_topic_entities(self.id):
-            insert_entry(config.trend_entity_link_table,
+            insert_entry(db_config.trend_entity_link_table,
                             "topic_id, entity_id",
                             (self.id, entity_id))
         
     def affirm_db_article_link(self, article_url:str):
         if article_url not in TrendStruct.get_topic_entities(self.id):
-            insert_entry(config.trend_article_link_table,
+            insert_entry(db_config.trend_article_link_table,
                             "topic_id, article_url",
                             (self.id, article_url))
 

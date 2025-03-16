@@ -1,20 +1,24 @@
-from flask import Flask, current_app, jsonify
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 from .server import ServerManager
-from .tools import analyse_post
-from structs.data import TrendStruct
+
+from .tools import tag_post
 
 serverManager = ServerManager()
 
 app = Flask(__name__)
+CORS(app)
 
-
-@app.route("/analyse_post") #, methods = ["GET", "POST"])
+@app.route("/analyse_post", methods=["GET", "POST"])
 def analyse_post():
-    #return jsonify(analyse_post(request.get_json["post_body"])), 200
-    return jsonify(TrendStruct.load_all_with_meta()), 200
+    try:
+        post_body = request.get_json()["post_body"]
+        return jsonify(tag_post(post_body)), 200
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Bad request"}), 400
 
 @app.route("/")
 def index():
-    current_app.logger.info("hello")
     return jsonify("hello"), 200

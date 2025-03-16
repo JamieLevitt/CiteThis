@@ -1,16 +1,15 @@
-const API_URL = "https://your-api.com/trending";
-const ANALYZE_URL = "https://your-api.com/analyse_tweet";
+/*chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "processPost") {
+      fetch("http://127.0.0.1:5000/analyse_post", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ post_body: message.postText })
+      })
+      .then(response => response.json())
+      .then(data => sendResponse(data))
+      .catch(error => console.error("Error fetching API:", error));
 
-async function fetchTrendingTopics() {
-  let lastFetch = await chrome.storage.local.get("citethis_lastFetch");
-  let now = Date.now();
-
-  if (!lastFetch.lastFetch || now - lastFetch.lastFetch > 3600000) {
-    let response = await fetch(API_URL);
-    let data = await response.json();
-    await chrome.storage.local.set({ trendingTopics: data, lastFetch: now });
+      return true; // Keep message channel open for async response
   }
-}
-
-chrome.runtime.onStartup.addListener(fetchTrendingTopics);
-chrome.runtime.onInstalled.addListener(fetchTrendingTopics);
+});
+*/

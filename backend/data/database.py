@@ -1,28 +1,44 @@
+# from google.cloud.sql.connector import Connector
+# import pg8000
+# from sqlalchemy.engine import create_engine, Engine
+# import sqlalchemy
 import psycopg2
-from psycopg2.errors import Error
 
-from core.config import data_config as config
+from core.config import db_config as config
 
-import sys
+# __connector = Connector()
+
+# def __get_engine() -> Engine:
+#     return create_engine(
+#         "postgresql+pg8000://",
+#         creator=lambda: __connector.connect(
+#             config.conn, "pg8000",
+#             user = config.user,
+#             password = config.password,
+#             db = config.name
+#         ),
+#         isolation_level = "AUTOCOMMIT",  #Enables autocommit mode
+#     )
+
+# engine : Engine = None
+
+# def init_db_engine():
+#     globals()["engine"] = __get_engine()
 
 def db_conn():
-    try:
-        conn = psycopg2.connect(
-            database = config.db_name,
-            user = config.db_user,
-            password = config.db_pass,
-            host = config.db_host,
-            port = config.db_port
+    conn = psycopg2.connect(
+            host = config.host,
+            database = config.name,
+            user = config.user,
+            password = config.password,
             )
-        conn.autocommit = True
-        return conn
-    except psycopg2.OperationalError as e:
-        print("error")
+    conn.autocommit = True
+    return conn
 
-#psql -h citethis-db.cbsiwywwk6pc.ap-southeast-2.rds.amazonaws.com -U administrator -d postgres 
-#xEfhWGPDQltjeGoZJjuu
+#psql -h 35.244.83.45 -U postgres -d postgres 
+#K36A8`*GLQy>i)gp
 
-def execute_command(command:str, args:tuple | list = None):
+def execute_command(command:str, args:tuple | list = None) -> list | None:
     with db_conn() as conn:
         with conn.cursor() as cur:
             try:
@@ -32,11 +48,26 @@ def execute_command(command:str, args:tuple | list = None):
 
                 if cur.description: return cur.fetchall()
 
-            except Error as e:
-                return []
+            except psycopg2.errors.Error:
+                return None
+    # if engine:
+    #     with engine.connect() as conn:
+    #         try:
+    #             stmt = sqlalchemy.text(command)
+    #             if args:
+    #                 result = conn.execute(stmt, args)
+    #             else:
+    #                 result = conn.execute(stmt)
+    #             if result.returns_rows:
+    #                 return result.fetchall()
+    #         except Exception:
+    #             return []
+    # else:
+    #     init_db_engine()
+    #     return execute_command(command, args)
         
 def fetch_entry(table:str, targets:str, fields:str = None, ids:tuple = None) -> tuple:
-    if fields is not None:
+    if fields is not None and ids is not None:
         cmd = execute_command(f"SELECT {targets} FROM {table} "
                               f"WHERE {fields} = {('%s,' * len(ids)).removesuffix(',')};", ids)
     else:

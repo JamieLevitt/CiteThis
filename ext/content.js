@@ -1,95 +1,96 @@
-function remove() {
-  const selectors = [
-      '[aria-label="Relevant people"]',
-      '[aria-label="What’s happening"]'
-  ];
-  selectors.forEach(selector => {
-      const elem = document.querySelector(selector);
-      if (elem) {
-          elem.remove();
+(function() {
+  // Debug logging helper
+  function log(msg) {
+    console.log("[TopicTagger]", msg);
+  }
+
+  // Wait for tweet and sidebar elements to load using a MutationObserver.
+  function waitForElements(callback, timeout = 15000) {
+    const startTime = Date.now();
+    const observer = new MutationObserver(() => {
+      const tweetDiv = document.querySelector('div[data-testid="tweetText"]');
+      const sidebar = document.querySelector('div[data-testid="sidebarColumn"]');
+      
+      if (!tweetDiv) {
+        log("Tweet text not found yet.");
+      } else {
+        log("Tweet text found.");
       }
-  });
-}
+      
+      if (!sidebar) {
+        log("Sidebar container not found yet.");
+      }
+      
+      // Use the precise selectors from your HTML
+      let relevantBox = sidebar ? sidebar.querySelector('aside[aria-label="Relevant people"]') : null;
+      let whatsHappeningBox = sidebar ? sidebar.querySelector('section[aria-labelledby="accessible-list-1"]') : null;
+      
+      if (!relevantBox) {
+        log("Relevant people box not found yet.");
+      } else {
+        log("Relevant people box found.");
+      }
+      
+      if (!whatsHappeningBox) {
+        log("What's happening section not found yet.");
+      } else {
+        log("What's happening section found.");
+      }
+      
+      if (tweetDiv && sidebar && relevantBox && whatsHappeningBox) {
+        observer.disconnect();
+        callback({ tweetDiv, relevantBox, whatsHappeningBox });
+      } else if (Date.now() - startTime > timeout) {
+        observer.disconnect();
+        log("Timeout reached; required elements not found.");
+      }
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
 
- // Create a custom box to insert into the sidebar.
- const customBox = document.createElement("div");
- customBox.id = "custom-topic-box";
- customBox.style.border = "1px solid #ccc";
- customBox.style.padding = "10px";
- customBox.style.margin = "10px";
- customBox.style.backgroundColor = "#f9f9f9";
+  // Main logic: insert the topic box and fetch topics from the API.
+  waitForElements(({ tweetDiv, relevantBox, whatsHappeningBox }) => {
+    // Create a new box with the custom CSS class.
+    const topicBox = document.createElement("div");
+    topicBox.className = "custom-box";
+    topicBox.innerText = "Loading topics...";
+    log("Inserting topic box between Relevant people and What's happening.");
 
- // Create a dropdown container for topic buttons.
- const dropdownContainer = document.createElement("div");
- dropdownContainer.id = "topic-dropdown";
- dropdownContainer.style.marginBottom = "10px";
- customBox.appendChild(dropdownContainer);
+    // Insert the topic box before the "What's happening" section.
+    whatsHappeningBox.parentNode.insertBefore(topicBox, whatsHappeningBox);
 
- // Create and add a loading message.
- const loadingMessage = document.createElement("div");
- loadingMessage.id = "loading-message";
- loadingMessage.innerText = "Extension is loading...";
- customBox.appendChild(loadingMessage);
+    // Extract the tweet text.
+    const postBody = tweetDiv.innerText;
+    log("Post body extracted: " + postBody.substring(0, 50) + "...");
 
- // Insert the custom box into Twitter’s sidebar.
- const sidebar = document.querySelector('aside[role="complementary"]');
- if (sidebar) {
-   sidebar.prepend(customBox);
- }
-
- fetch("https://api.example.com/tag_twitter_post?postId=123")
+    // Send the tweet content to your Flask API endpoint.
+    fetch('http://127.0.0.1:5000/analyse_post', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ post_body: postBody })
+    })
     .then(response => response.json())
     .then(data => {
-      // Remove the loading message.
-      loadingMessage.remove();
-
-      // data is expected to be in the form:
-      // { "taggedContent": "<div>...</div>", "topics": { "politics": [...], "sports": [...] } }
-      // Create a button for each topic from the JSON response.
-      if (data.topics) {
-        Object.keys(data.topics).forEach(topic => {
-          const btn = document.createElement("button");
-          btn.innerText = topic;
-          btn.style.marginRight = "5px";
-          btn.style.backgroundColor = getPastelColor(topic);
-          btn.style.border = "none";
-          btn.style.padding = "5px 10px";
-          btn.style.cursor = "pointer";
-
-          // Toggle highlighting for all tagged words of this topic.
-          btn.addEventListener("click", () => {
-            const taggedEls = document.querySelectorAll(`span.topic-tag[data-topic="${topic}"]`);
-            taggedEls.forEach(el => {
-              // Toggle highlight: if background color is set, remove it; otherwise, set it.
-              if (el.style.backgroundColor) {
-                el.style.backgroundColor = "";
-              } else {
-                el.style.backgroundColor = getPastelColor(topic);
-              }
-            });
-          });
-          dropdownContainer.appendChild(btn);
+      log("API response received.");
+      log(data);
+      if (data.topics && Array.isArray(data.topics) && data.topics.length > 0) {
+        // Create an unordered list of topics.
+        const ul = document.createElement("ul");
+        data.topics.forEach(topicObj => {
+          const li = document.createElement("li");
+          li.textContent = topicObj.topic;
+          ul.appendChild(li);
         });
+        topicBox.innerHTML = "";
+        topicBox.appendChild(ul);
+      } else {
+        topicBox.innerText = "No topics found.";
       }
-
-      // Insert the tagged post content returned from the Python function.
-      const contentDiv = document.createElement("div");
-      // Expecting the Python service to return the tagged HTML under the key "taggedContent"
-      contentDiv.innerHTML = data.taggedContent || "";
-      customBox.appendChild(contentDiv);
     })
-    .catch(err => {
-      console.error("Error fetching tagged content:", err);
-      loadingMessage.innerText = "Failed to load content.";
+    .catch(error => {
+      log("Error fetching topics: " + error);
+      topicBox.innerText = "Error loading topics.";
     });
-});
-
-// A simple deterministic pastel colour generator based on a seed string.
-function getPastelColor(seed) {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = seed.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const h = Math.abs(hash) % 360;
-  return `hsl(${h}, 70%, 80%)`;
-}
+  });
+})();

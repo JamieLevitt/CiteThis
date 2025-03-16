@@ -1,9 +1,7 @@
-from flask import current_app
-from datetime import datetime, timezone, timedelta
-def server_time() -> datetime:
-        return datetime.now(timezone.utc)
+from datetime import datetime
 
-import time
+def server_time() -> datetime:
+        return datetime.now()
 
 from .tools import update_trends, update_articles, purge_dead_entries
 
@@ -12,42 +10,51 @@ from structs.data import TrendStruct
 
 from .config import data_config as config
 
-import inspect
+import threading, time, inspect
 
 class ServerManager:
-    def __init__(self): self.i = 0
+    def __init__(self): 
+        self.i = 0
 
     @staticmethod
     def load_topics() -> list[TrendStruct]:
         return TrendStruct.load_all_from_db()
-    
-    def main_loop(self):
-        try:
-            print("hi")
-            i = 0
-            while True:
-                print(i)
-                i += 1
-                self.__process_queue()
-                time.sleep(1)
-        except KeyboardInterrupt:
-            return
         
-    def __process_queue(self):
-        for method in self.queuemethods: 
-            method()
+    def process_queue(self):
+        def queue_runner():
+            try:
+                while True:
+                    for method in self.queuemethods:
+                        queue_instance = method._queue_method_instance  # Access the decorator instance
+                        last_called = queue_instance.last_called
+                        interval = queue_instance.interval
+                    
+                        # Check if the method is ready to be called
+                        if last_called is None or (server_time() - last_called).total_seconds() >= interval * 3600:
+                            try:
+                                method()  # Call the queued method
+                            except Exception as e:
+                                print(f"Error while processing {method.__name__}: {e}")
+                                return  # Stop execution on failure
+                    time.sleep(60)  # Wait before checking again
+            except (SystemExit, KeyboardInterrupt):
+                print("Shutting down process queue gracefully...")
+                return
+    
+        thread = threading.Thread(target=queue_runner, daemon=True)
+        thread.start()
 
-    # @QueueMethod(lambda x: x <= server_time() - timedelta(hours = config.trends_fetch_pause))
-    # def _update_trends(self):
-    #     print("updating trends")
-    #     update_trends()
+    @QueueMethod(config.trends_fetch_pause)
+    def _update_trends(self):
+        print("updating trends")
+        update_trends()
 
-    @QueueMethod(lambda x: x <= server_time() - timedelta(hours = config.news_fetch_pause))
+    @QueueMethod(config.news_fetch_pause)
     def _update_articles(self):
         print("updating articles")
         update_articles()
 
-    @QueueMethod(lambda x: x <= server_time() - timedelta(hours = config.purge_check_pause))
+    @QueueMethod(config.purge_check_pause)
     def _purge_dead_entries(self):
         print("purging")
         purge_dead_entries()
