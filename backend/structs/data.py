@@ -115,10 +115,9 @@ class TrendStruct(DataStruct):
     
     @staticmethod
     def load_all_with_kw() -> dict:
-        return { trend.id: {
-                    "keywords": [keyword for entity in
+        return { trend.id: [keyword for entity in
                                     TrendStruct.get_topic_entities(trend.id)
-                                        for keyword in entity.keywords]}
+                                        for keyword in entity.keywords]
                     for trend in TrendStruct.load_all_from_db()}
 
     @staticmethod
