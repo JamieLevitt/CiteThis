@@ -232,10 +232,10 @@
       parentContainer.insertBefore(citeBox, whatsHappeningBox);
 
       // Fetch topic data from your Flask API.
-      fetch('http://localhost:5000/analyse_post', {
+      fetch('http://192.168.0.191:8000/analyse_post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ post_body: tweetDiv.outerHTML })
+        body: JSON.stringify({ text: tweetDiv.outerHTML })
       })
       .then(response => response.json())
       .then(data => {

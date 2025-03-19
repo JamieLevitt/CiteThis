@@ -1,12 +1,10 @@
-import asyncio
-
 from data.collection import get_trends_raw
 from data.processing import process_trend, process_articles, process_post
 
 from structs.data import TrendStruct, EntityStruct, ArticleStruct
 
-def update_trends():
-    raw_trends = asyncio.run(get_trends_raw())
+async def update_trends():
+    raw_trends = await get_trends_raw()
     for raw in raw_trends:
         if not TrendStruct.is_in_db(raw["topic"]):
             process_trend(raw)

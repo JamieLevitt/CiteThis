@@ -2,12 +2,10 @@ from __future__ import annotations
 from typing import TypeVar, Type
 
 from data.database import insert_entry, fetch_entry, delete_entry
-
-from core.server import server_time
 from core.config import db_config as db_config
 from core.config import data_config as config
 
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta, timezone
 from dataclasses import dataclass, fields
 
 D = TypeVar('D', bound='DataStruct')
@@ -52,8 +50,9 @@ class DataStruct:
         if structs is None: return
         for struct in structs:
             lifespan_marker = getattr(struct, struct.lifespan_attr)
-            if type(lifespan_marker) is date: comp = (server_time() - timedelta(days = struct.lifespan)).date()
-            else: comp = server_time() - timedelta(days = struct.lifespan)
+            if type(lifespan_marker) is date: comp = (
+                    datetime.now(timezone.utc) - timedelta(days = struct.lifespan)).date()
+            else: comp = datetime.now(timezone.utc) - timedelta(days = struct.lifespan)
 
             if lifespan_marker <= comp:
                 delete_entry(cls.table, cls.id_alias, (struct.id,))

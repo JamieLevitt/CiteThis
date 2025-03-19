@@ -1,20 +1,27 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from .server import BackendManager
-
+from .tasks import tasks_router
+from structs.core import PostBody, TrendData
 from .tools import tag_post
 
-serverManager = BackendManager()
+app = FastAPI()
+app.include_router(tasks_router, prefix="/tasks")
 
-app = Flask(__name__)
-CORS(app)
+#Allow for CORS requests
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.route("/analyse_post", methods=["GET", "POST"])
-def analyse_post():
+
+@app.post("/analyse_post", response_model=TrendData)
+def analyse_post(post_body:PostBody):
     try:
-        post_body = request.get_json()["post_body"]
-        return jsonify(tag_post(post_body)), 200
+        return tag_post(post_body.text)
     except Exception as e:
-        print(e)
-        return jsonify({"error": "Bad request"}), 400
+        return {"error": str(e)}

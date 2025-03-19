@@ -8,7 +8,6 @@ from core.config import collection_config as config
 import json, re
 
 _google_ai_api_key = config.google_genai_key
-print(_google_ai_api_key)
 
 _client = genai.Client(api_key = _google_ai_api_key)
 _model = "gemini-2.0-flash-exp"

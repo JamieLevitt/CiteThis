@@ -1,13 +1,9 @@
 import os
-from os.path import join, dirname
-
-from dotenv import load_dotenv
-load_dotenv(dirname("__main__"), ".env")
 
 class db_config:
-    host = "35.244.83.45" #os.environ.get("DB_HOST")
+    host = "35.244.83.45" #os.getenv("DB_HOST")
     user = "postgres"
-    password = "K36A8`*GLQy>i)gp" #os.environ.get("DB_PASSWORD")
+    password = "K36A8`*GLQy>i)gp" #os.getenv("DB_PASSWORD")
     name = "postgres"
 
     trends_table = "trending_topics"
@@ -27,8 +23,8 @@ class data_config:
     entity_lifespan = 61 #days (2 months)
 
 class collection_config:
-    news_api_key = "pub_7338657c5b399dcf95c5a24c0230a517587f9" #os.environ.get("NEWS_API_KEY")
-    google_genai_key = "AIzaSyAHP4udsHwqXQZJ7O-ilz6QfdL3Nx1ea2o" #os.environ.get("GOOGLE_GENAI_KEY")
+    news_api_key = "pub_7338657c5b399dcf95c5a24c0230a517587f9" #os.getenv("NEWS_API_KEY")
+    google_genai_key = "AIzaSyAHP4udsHwqXQZJ7O-ilz6QfdL3Nx1ea2o" #os.getenv("GOOGLE_GENAI_KEY")
 
     fetch_trends_url = "https://trends.google.com/trending?geo=US&hl=en-US&category=14&hours=48"
 

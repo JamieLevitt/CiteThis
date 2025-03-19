@@ -1,23 +1,21 @@
-import functools, datetime
+from pydantic import BaseModel
 
-class QueueMethod(object):
-    def __init__(self, interval:int):
-        self.__interval = interval #time in hours between calls
-        self.__last_called = None
-    
-    def __call__(self, func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            res = func(*args, **kwargs)
-            self.__last_called = datetime.datetime.now()
-            return res
-        wrapper._queue_method_instance = self
-        return wrapper
-    
-    @property
-    def last_called(self) -> datetime:
-        return self.__last_called
-    
-    @property
-    def interval(self) -> int:
-        return self.__interval
+from datetime import datetime
+
+class PostBody(BaseModel):
+    text : str
+
+class EntityData(BaseModel):
+    wiki_url : str = None
+    twitter_url : str = None
+
+class ArticleData(BaseModel):
+    url : str
+    source : str
+    published : datetime
+
+class TrendData(BaseModel):
+    topic : str
+    instances : list[str]
+    entities : list[EntityData]
+    articles : list[ArticleData]
