@@ -1,52 +1,106 @@
-/* Main container styled to mimic X's sidebar boxes */
-.custom-box {
-    background-color: #15202b;
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 12px;
-    margin-bottom: 12px;
-    border-radius: 8px;
-    font-size: 14px;
-  }
-  
-  /* Dropdown for topic buttons */
-  .topic-dropdown {
-    margin-bottom: 10px;
-  }
-  .topic-button {
-    margin-right: 5px;
-    margin-bottom: 5px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  /* Scrollable info area */
-  .topic-info-container {
-    max-height: 200px;
-    overflow-y: auto;
-    border-top: 1px solid rgba(255,255,255,0.2);
-    padding-top: 10px;
-  }
-  .topic-section h3 {
-    margin: 5px 0;
-    font-size: 16px;
-  }
-  .topic-section ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-  }
-  .topic-section li {
-    margin: 3px 0;
-  }
-  .topic-section a {
-    color: #1da1f2;
-    text-decoration: none;
-  }
-  .topic-section a:hover {
-    text-decoration: underline;
-  }
-  
+:root {
+  --highlight-color: hsl(0, 70%, 80%);
+  --scrollbar-hue: 0;
+}
+
+#citethis-box {
+  font-family: 'Courier New', Courier, monospace;
+  height: fit-content;
+  padding-left: 16px;
+}
+
+/* Expandable topic details */
+.topic-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+.expanded .topic-details {
+  max-height: 500px;
+}
+
+/* Topic button styling */
+.topic-button-container {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 8px;
+  transition: background-color 0.3s ease;
+  width: calc(100% - 16px); /* Fixing overextension */
+  box-sizing: border-box;
+}
+.expanded {
+  background-color: var(--highlight-color);
+}
+
+/* Highlighted tweet words */
+.highlighted {
+  background-color: var(--highlight-color);
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* Scrollable and non-scrollable containers */
+.items-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  padding-top: 4px;
+}
+
+/* Horizontal scrolling area - now 2 rows tall, no gaps */
+.items-container.scrollable {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to break into multiple rows */
+  overflow-x: auto; /* Enables horizontal scrolling */
+  overflow-y: hidden;
+  border-left: 3px solid var(--highlight-color);
+  padding-left: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--scrollbar-hue), 70%, 60%) transparent;
+  row-gap: 4px; /* Ensures no space between rows */
+  align-content: flex-start; /* Makes sure rows align at the top */
+  max-height: calc(2 * 40px + 8px); /* Approx height for 2 rows of buttons */
+}
+
+/* Ensure buttons only take up the width they need */
+.items-container.scrollable .citethis-link-button {
+  width: max-content; /* Fit text width */
+  white-space: nowrap; /* Prevent text wrapping */
+  display: inline-block; /* Behave as inline elements for spacing */
+  padding: 8px 12px; /* Consistent button padding */
+  margin: 0; /* Remove unwanted gaps */
+  flex-shrink: 0; /* Prevent buttons from shrinking */
+}
+
+/* News Articles: Ensure scrollbar appears */
+.items-container.scrollable.news {
+  max-height: 150px;
+  overflow-y: auto; /* Ensure vertical scroll is allowed */
+  border-left: 3px solid var(--highlight-color);
+  padding-left: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--scrollbar-hue), 70%, 60%) transparent;
+}
+.items-container.scrollable.news .citethis-link-button {
+  width: 100%;
+  text-align: left;
+}
+
+/* Button styling with slightly darker backgrounds */
+.citethis-link-button {
+  background-color: hsl(var(--scrollbar-hue), 70%, 70%); /* Slightly darker */
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+  text-align: left;
+  white-space: nowrap; /* Prevent multi-line breaks */
+}
+.citethis-link-button:hover {
+  background-color: hsl(var(--scrollbar-hue), 70%, 60%);
+}

@@ -1,225 +1,268 @@
 (function() {
-  // Debug logging helper
-  function log(msg) {
-    console.log("[TopicTagger]", msg);
-  }
+  let currentUrl = location.href;
 
-  // Wait for tweet and sidebar elements to load using a MutationObserver.
-  function waitForElements(callback, timeout = 15000) {
-    const startTime = Date.now();
-    const observer = new MutationObserver(() => {
-      const tweetDiv = document.querySelector('div[data-testid="tweetText"]');
-      const sidebar = document.querySelector('div[data-testid="sidebarColumn"]');
-      
-      if (!tweetDiv) {
-        log("Tweet text not found yet.");
-      } else {
-        log("Tweet text found.");
-      }
-      
-      if (!sidebar) {
-        log("Sidebar container not found yet.");
-      }
-      
-      // Use selectors based on your HTML:
-      let relevantBox = sidebar ? sidebar.querySelector('aside[aria-label="Relevant people"]') : null;
-      let whatsHappeningBox = sidebar ? sidebar.querySelector('section[aria-labelledby="accessible-list-1"]') : null;
-      
-      if (!relevantBox) {
-        log("Relevant people box not found yet.");
-      } else {
-        log("Relevant people box found.");
-      }
-      
-      if (!whatsHappeningBox) {
-        log("What's happening section not found yet.");
-      } else {
-        log("What's happening section found.");
-      }
-      
-      if (tweetDiv && sidebar && relevantBox && whatsHappeningBox) {
-        observer.disconnect();
-        callback({ tweetDiv, relevantBox, whatsHappeningBox });
-      } else if (Date.now() - startTime > timeout) {
-        observer.disconnect();
-        log("Timeout reached; required elements not found.");
-      }
+  // --- Monkey-patch history methods to dispatch a 'locationchange' event ---
+  (function() {
+    const _wr = function(type) {
+      const orig = history[type];
+      return function() {
+        const rv = orig.apply(this, arguments);
+        window.dispatchEvent(new Event('locationchange'));
+        return rv;
+      };
+    };
+    history.pushState = _wr('pushState');
+    history.replaceState = _wr('replaceState');
+    window.addEventListener('popstate', function(){
+      window.dispatchEvent(new Event('locationchange'));
     });
-    
-    observer.observe(document.body, { childList: true, subtree: true });
+  })();
+
+  // Logging helper.
+  function log(msg) {
+    console.log("[CiteThis]", msg);
   }
 
-  // Generate a pastel color using HSL; evenly spaced hues.
+  // Escape RegExp special characters.
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  // Generate a pastel color and return both the color and its hue.
+  // Pastel color: hsl(hue, 70%, 80%)
   function generatePastelColor(index, total) {
     const hue = Math.floor(index * (360 / total));
-    return `hsl(${hue}, 70%, 80%)`;
+    return { pastel: `hsl(${hue}, 70%, 80%)`, hue: hue };
   }
 
-  // Helper: extract wiki title from a wiki URL.
-  function extractWikiTitle(url) {
-    const parts = url.split("/wiki/");
-    if (parts.length > 1) {
-      return parts[1].replace(/_/g, " ");
-    }
-    return url;
+  // Build a link button for detail items.
+  // Every link element is rendered as a button with class "citethis-link-button".
+  function buildLinkButton(item) {
+    const btn = document.createElement("button");
+    btn.className = "citethis-link-button";
+    btn.textContent = item.text;
+    btn.addEventListener("click", () => {
+      window.open(item.url.startsWith("http") ? item.url : ("https://" + item.url), "_blank");
+    });
+    return btn;
   }
 
-  // Create a section with a title and list of hyperlinks.
-  // items is an array of objects: for "handle", each item is a string;
-  // for "wiki" and "article", each item is an object {url, text}.
-  function createSection(titleText, items, type) {
+  // Build an area/section for a given category.
+  // containerClass is provided (for example: "items-container scrollable accounts")
+  function buildArea(titleText, items, containerClass) {
     const section = document.createElement("div");
-    section.className = "topic-section";
-    const header = document.createElement("h3");
+    section.className = "detail-section";
+    const header = document.createElement("h4");
     header.textContent = titleText;
     section.appendChild(header);
-    
-    const list = document.createElement("ul");
+    const container = document.createElement("div");
+    container.className = containerClass;
+    let built_labels = [];
     items.forEach(item => {
-      const li = document.createElement("li");
-      const link = document.createElement("a");
-      if (type === "handle") {
-        // item is a string, e.g. "@username"
-        link.textContent = item;
-        link.href = "https://x.com/" + item.substring(1);
-      } else if (type === "wiki") {
-        // item is an object { url, text }
-        link.textContent = item.text;
-        link.href = item.url;
-      } else if (type === "article") {
-        // For articles, display a combination of source and published date if available.
-        link.textContent = item.text;
-        link.href = item.url;
-      }
-      link.target = "_blank";
-      li.appendChild(link);
-      list.appendChild(li);
+      console.log(item.text)
+      if (built_labels.includes(item.text) != true) {
+        const btn = buildLinkButton(item);
+        container.appendChild(btn);}
+        built_labels.push(item.text)
     });
-    section.appendChild(list);
+    section.appendChild(container);
     return section;
   }
 
-  // Main logic: wait for elements, then insert our custom topic UI.
-  waitForElements(({ tweetDiv, relevantBox, whatsHappeningBox }) => {
-    // Create the container for our topic box.
-    const topicBox = document.createElement("div");
-    topicBox.className = "custom-box";
-    topicBox.innerText = "Loading topics...";
-    log("Inserting topic box into sidebar.");
-    
-    // Insert the topic box before the "What's happening" section.
-    whatsHappeningBox.parentNode.insertBefore(topicBox, whatsHappeningBox);
-    
-    // Extract the tweet HTML (we want the innerHTML, not just text, for proper tagging).
-    const tweetHTML = tweetDiv.outerHTML;
-    log("Tweet HTML extracted.");
-    
-    // Send the tweet content to your Flask API endpoint.
-    fetch('http://localhost:5000/analyse_post', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ post_body: tweetHTML })
-    })
-    .then(response => response.json())
-    .then(data => {
-      log("API response received.");
-      // Assume the API returns an object:
-      // { topics: [ { topic, entities, articles } ], tagged: "<tagged html>" }
-      
-      // Replace the tweet content with the tagged HTML.
-      const tweetContainer = document.createElement("div");
-      tweetContainer.innerHTML = data.tagged;
-      tweetDiv.parentNode.replaceChild(tweetContainer, tweetDiv);
-      
-      // Clear the topicBox and build our UI.
-      topicBox.innerHTML = "";
-      
-      // Build the dropdown (a row of buttons) for each topic.
-      const dropdown = document.createElement("div");
-      dropdown.className = "topic-dropdown";
-      
-      // Prepare arrays to aggregate related links.
-      const handles = [];
-      const wikiLinks = [];
-      const articleLinks = [];
-      
-      const topics = data.topics;
-      const topicColorMapping = {};
-      topics.forEach((topicObj, index) => {
-        // Generate a pastel color for this topic.
-        const pastelColor = generatePastelColor(index, topics.length);
-        topicColorMapping[topicObj.topic] = pastelColor;
-        
-        // Create a button for this topic.
-        const button = document.createElement("button");
-        button.className = "topic-button";
-        button.style.backgroundColor = pastelColor;
-        button.textContent = topicObj.topic;
-        button.addEventListener("click", () => {
-          // Clear previous highlights.
-          tweetContainer.querySelectorAll("[data-topic]").forEach(el => {
-            el.style.backgroundColor = "";
-          });
-          // Highlight words in the tweet tagged with this topic.
-          tweetContainer.querySelectorAll(`[data-topic="${topicObj.topic}"]`).forEach(el => {
-            el.style.backgroundColor = pastelColor;
-          });
-        });
-        dropdown.appendChild(button);
-        
-        // Aggregate related info from entities.
-        topicObj.entities.forEach(entity => {
-          if (entity.twitter_url) {
-            let parts = entity.twitter_url.split("/");
-            let handle = "@" + parts[parts.length - 1];
-            handles.push(handle);
-          }
-          if (entity.wiki_url) {
-            wikiLinks.push({
-              url: entity.wiki_url,
-              text: extractWikiTitle(entity.wiki_url)
+  // Build an expandable details area from the API data.
+  function buildExpandableArea(topicObj) {
+    const details = document.createElement("div");
+    details.className = "topic-details";
+
+    let accounts = [];
+    let wikiArticles = [];
+    let priorityArticles = [];
+    let newsArticles = [];
+
+    // Collect data from entities.
+    if (topicObj.entities && topicObj.entities.length > 0) {
+      topicObj.entities.forEach(entity => {
+        if (entity.twitter_url && entity.twitter_url.trim() !== "") {
+          let parts = entity.twitter_url.split("/").filter(p => p);
+          if (parts.length > 0) {
+            accounts.push({
+              text: "@" + parts[parts.length - 1],
+              url: "https://x.com/" + parts[parts.length - 1]
             });
           }
-        });
-        
-        // Aggregate articles.
-        topicObj.articles.forEach(article => {
-          // If the article has a source and published date, combine them;
-          // otherwise, default to the URL.
-          let display = article.source 
-                        ? `${article.source} (${article.published})`
-                        : article.url;
-          articleLinks.push({
-            url: article.url,
-            text: display
+        }
+        if (entity.wiki_url && entity.wiki_url.trim() !== "") {
+          let title = entity.wiki_url.split("/wiki/")[1]?.replace(/_/g, " ") || entity.wiki_url;
+          wikiArticles.push({
+            text: title,
+            url: entity.wiki_url
           });
-        });
+        }
       });
-      
-      // Remove duplicate entries.
-      const uniqueHandles = Array.from(new Set(handles));
-      const uniqueWikiLinks = Array.from(new Map(wikiLinks.map(item => [item.url, item])).values());
-      const uniqueArticleLinks = Array.from(new Map(articleLinks.map(item => [item.url, item])).values());
-      
-      // Create a scrollable info area.
-      const infoContainer = document.createElement("div");
-      infoContainer.className = "topic-info-container";
-      
-      const handlesSection = createSection("Relevant Handles", uniqueHandles, "handle");
-      const wikiSection = createSection("Relevant Wikipedia Articles", uniqueWikiLinks, "wiki");
-      const articlesSection = createSection("Relevant articles", uniqueArticleLinks, "article");
-      
-      infoContainer.appendChild(handlesSection);
-      infoContainer.appendChild(wikiSection);
-      infoContainer.appendChild(articlesSection);
-      
-      // Append the dropdown and info area to the topicBox.
-      topicBox.appendChild(dropdown);
-      topicBox.appendChild(infoContainer);
-    })
-    .catch(error => {
-      topicBox.innerText = "Error loading topics.";
-      console.error("Error:", error);
+    }
+    // Collect articles data.
+    if (topicObj.articles && topicObj.articles.length > 0) {
+      topicObj.articles.forEach(article => {
+        if (article.url && article.url.trim() !== "") {
+          const articleData = {
+            text: `${article.source} - ${article.published.split(" ")[0]}`,
+            url: article.url
+          };
+          if (article.priority) {
+            priorityArticles.push(articleData);
+          } else {
+            newsArticles.push(articleData);
+          }
+        }
+      });
+    }
+
+    // Build sections using the same layout for accounts and wiki (scrollable area).
+    if (accounts.length > 0) {
+      details.appendChild(buildArea("RELATED ACCOUNTS", accounts, "items-container scrollable accounts"));
+    }
+    if (wikiArticles.length > 0) {
+      details.appendChild(buildArea("RELATED WIKIPEDIA ARTICLES", wikiArticles, "items-container scrollable wiki"));
+    }
+    // Priority articles: vertical list, non-scrollable.
+    if (priorityArticles.length > 0) {
+      details.appendChild(buildArea("PRIORITY NEWS ARTICLES", priorityArticles, "items-container priority"));
+    }
+    // News articles: vertical list in a scrollable area.
+    if (newsArticles.length > 0) {
+      details.appendChild(buildArea("NEWS ARTICLES", newsArticles, "items-container scrollable news"));
+    }
+    if (details.childNodes.length === 0) {
+      details.textContent = "No additional details.";
+    }
+    return details;
+  }
+
+  // Build a topic button container that acts like a radio button.
+  function buildTopicButton(topicObj, originalTweetHTML, tweetDiv, index) {
+    const container = document.createElement("div");
+    container.classList.add("topic-button-container");
+    // Create a header for the topic.
+    const header = document.createElement("h2");
+    header.className = "topic-title";
+    header.textContent = topicObj.topic;
+    container.appendChild(header);
+    // Append the expandable details area.
+    const detailsArea = buildExpandableArea(topicObj);
+    container.appendChild(detailsArea);
+
+    // Click behavior: toggle expanded state and update tweet text highlighting.
+    container.addEventListener("click", () => {
+      if (container.classList.contains("expanded")) {
+        container.classList.remove("expanded");
+        tweetDiv.innerHTML = originalTweetHTML;
+      } else {
+        document.querySelectorAll(".topic-button-container.expanded").forEach(btn => btn.classList.remove("expanded"));
+        container.classList.add("expanded");
+        tweetDiv.innerHTML = originalTweetHTML;
+        topicObj.instances.forEach(instance => {
+          const escapedInstance = escapeRegExp(instance);
+          const regex = new RegExp(`\\b(${escapedInstance})\\b`, 'gi');
+          tweetDiv.innerHTML = tweetDiv.innerHTML.replace(
+            regex,
+            `<span class="highlighted">$1</span>`
+          );
+        });
+      }
     });
-  });
+    return container;
+  }
+
+  // Wait until exactly 2 divs with Twitter's classes exist.
+  const twitterBoxClasses = 'div.css-175oi2r.r-kemksi.r-1kqtdi0.r-1867qdf.r-1phboty.r-rs99b7.r-1ifxtd0.r-1udh08x';
+  function waitForTwoBoxes(callback, timeout = 15000) {
+    const startTime = Date.now();
+    function check() {
+      const boxes = document.querySelectorAll(twitterBoxClasses);
+      log("Found " + boxes.length + " boxes matching selector: " + twitterBoxClasses);
+      if (boxes.length === 2) {
+        callback(boxes);
+      } else if (Date.now() - startTime > timeout) {
+        log("Timeout reached while waiting for 2 boxes.");
+      } else {
+        setTimeout(check, 1000);
+      }
+    }
+    check();
+  }
+
+  // Main initialization function.
+  function initCiteThis() {
+    log("Initializing CiteThis for URL: " + location.href);
+    const oldBox = document.querySelector('#citethis-box');
+    if (oldBox) { oldBox.remove(); }
+
+    const tweetDiv = document.querySelector('div[data-testid="tweetText"]');
+    if (!tweetDiv) {
+      log("Tweet text element not found. Delaying initialization.");
+      setTimeout(initCiteThis, 1000);
+      return;
+    }
+    const originalTweetHTML = tweetDiv.innerHTML;
+    log("Tweet HTML saved.");
+
+    waitForTwoBoxes((boxes) => {
+      log("Two boxes found. Inserting CiteThis box.");
+      const relevantPeopleBox = boxes[0];
+      const whatsHappeningBox = boxes[1];
+      const parentContainer = relevantPeopleBox.parentNode;
+      if (!parentContainer) {
+        log("Parent container not found.");
+        return;
+      }
+      // Create the main container using Twitter's classes.
+      const citeBox = document.createElement("div");
+      citeBox.id = "citethis-box";
+      citeBox.className = "css-175oi2r r-kemksi r-1kqtdi0 r-1867qdf r-1phboty r-rs99b7 r-1ifxtd0 r-1udh08x";
+      // Create a title element.
+      const title = document.createElement("h2");
+      title.className = "cite-title";
+      title.textContent = "CiteThis Sources";
+      citeBox.appendChild(title);
+      // Create a container for topic buttons.
+      const itemsContainer = document.createElement("div");
+      itemsContainer.className = "cite-items";
+      citeBox.appendChild(itemsContainer);
+
+      parentContainer.insertBefore(citeBox, whatsHappeningBox);
+
+      // Fetch topic data from your Flask API.
+      fetch('http://localhost:5000/analyse_post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ post_body: tweetDiv.outerHTML })
+      })
+      .then(response => response.json())
+      .then(data => {
+        log("API response received.");
+        itemsContainer.innerHTML = "";
+        const topics = data.topics;
+        topics.forEach((topicObj, index) => {
+          const topicButton = buildTopicButton(topicObj, originalTweetHTML, tweetDiv, index);
+          itemsContainer.appendChild(topicButton);
+        });
+      })
+      .catch(error => {
+        itemsContainer.textContent = "Error loading topics.";
+        console.error("Error:", error);
+      });
+    });
+  }
+
+  // Monitor URL changes for SPA navigation.
+  setInterval(() => {
+    if (location.href !== currentUrl) {
+      currentUrl = location.href;
+      log("URL changed, reinitializing CiteThis.");
+      initCiteThis();
+    }
+  }, 1000);
+
+  // Initial call.
+  initCiteThis();
 })();

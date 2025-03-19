@@ -1,7 +1,7 @@
 from .collection import (get_trend_entities_raw,
                             get_entity_data_raw, get_trend_articles_raw)
 
-from .aitools.post_analysis import tag_post_body
+from .aitools.post_analysis import extract_instances
 
 from structs.data import TrendStruct, EntityStruct, ArticleStruct
 
@@ -73,16 +73,16 @@ def process_trend(trend_raw:dict):
     for article in articles: struct.affirm_db_article_link(article.id)
 
 def process_post(post_body:str) -> str: 
-    topics, tagged = tag_post_body(post_body)
+    topics = extract_instances(post_body)
     return {
         "topics": [
             {"topic": topic, 
+             "instances": instances,
              "entities": [
                 {"wiki_url": entity.wiki_url, "twitter_url": entity.twitter_url}
                 for entity in TrendStruct.get_topic_entities(topic)],
              "articles": [
                 {"url": article.id, "source": article.source, "published": article.published_date}
                 for article in TrendStruct.get_topic_articles(topic)]
-             } for topic in topics],
-        "tagged": tagged
+             } for topic, instances in topics.items()],
     }

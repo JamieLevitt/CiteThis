@@ -1,24 +1,18 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 def server_time() -> datetime:
-        return datetime.now()
+        return datetime.now(timezone.utc)
 
 from .tools import update_trends, update_articles, purge_dead_entries
 
 from structs.core import QueueMethod
-from structs.data import TrendStruct
 
 from .config import data_config as config
 
-import threading, time, inspect
+import threading, inspect
 
-class ServerManager:
-    def __init__(self): 
-        self.i = 0
-
-    @staticmethod
-    def load_topics() -> list[TrendStruct]:
-        return TrendStruct.load_all_from_db()
+class BackendManager:
+    def __init__(self): pass
         
     def process_queue(self):
         def queue_runner():
@@ -36,7 +30,6 @@ class ServerManager:
                             except Exception as e:
                                 print(f"Error while processing {method.__name__}: {e}")
                                 return  # Stop execution on failure
-                    time.sleep(60)  # Wait before checking again
             except (SystemExit, KeyboardInterrupt):
                 print("Shutting down process queue gracefully...")
                 return

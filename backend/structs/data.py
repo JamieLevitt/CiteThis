@@ -8,7 +8,7 @@ from core.config import db_config as db_config
 from core.config import data_config as config
 
 from datetime import date, timedelta
-from dataclasses import dataclass, fields, asdict
+from dataclasses import dataclass, fields
 
 D = TypeVar('D', bound='DataStruct')
 

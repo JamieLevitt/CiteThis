@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from .server import ServerManager
+from .server import BackendManager
 
 from .tools import tag_post
 
-serverManager = ServerManager()
+serverManager = BackendManager()
 
 app = Flask(__name__)
 CORS(app)
@@ -18,7 +18,3 @@ def analyse_post():
     except Exception as e:
         print(e)
         return jsonify({"error": "Bad request"}), 400
-
-@app.route("/")
-def index():
-    return jsonify("hello"), 200
