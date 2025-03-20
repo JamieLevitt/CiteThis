@@ -33,7 +33,7 @@ def __process_entities(trend_id:str) -> list[EntityStruct]:
                 struct.insert_into_db()
                 res.append(struct)
             else:
-                res.append(EntityStruct.load_from_db(entity["name"]))
+                res.append(EntityStruct.load_from_db(entity))
                      
     return res
 

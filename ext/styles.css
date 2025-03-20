@@ -7,6 +7,11 @@
   font-family: 'Courier New', Courier, monospace;
   height: fit-content;
   padding-left: 16px;
+  
+}
+
+.cite-title {
+  font-size: 20px;
 }
 
 /* Expandable topic details */
@@ -15,8 +20,13 @@
   overflow: hidden;
   transition: max-height 0.5s ease;
 }
+
 .expanded .topic-details {
   max-height: 500px;
+}
+
+.topic-title {
+  text-transform: uppercase;
 }
 
 /* Topic button styling */
@@ -52,26 +62,26 @@
 /* Horizontal scrolling area - now 2 rows tall, no gaps */
 .items-container.scrollable {
   display: flex;
-  flex-wrap: wrap; /* Allows items to break into multiple rows */
-  overflow-x: auto; /* Enables horizontal scrolling */
+  flex-wrap: wrap;
+  gap: 4px; /* Uniform spacing for both rows and columns */
+  overflow-x: auto;
   overflow-y: hidden;
+  align-content: flex-start;
   border-left: 3px solid var(--highlight-color);
   padding-left: 8px;
   scrollbar-width: thin;
   scrollbar-color: hsl(var(--scrollbar-hue), 70%, 60%) transparent;
-  row-gap: 4px; /* Ensures no space between rows */
-  align-content: flex-start; /* Makes sure rows align at the top */
-  max-height: calc(2 * 40px + 8px); /* Approx height for 2 rows of buttons */
+  /* Adjust max-height based on your button height (here assumed ~40px) plus one gap */
+  max-height: calc(2 * 40px + 4px);
 }
 
-/* Ensure buttons only take up the width they need */
 .items-container.scrollable .citethis-link-button {
-  width: max-content; /* Fit text width */
-  white-space: nowrap; /* Prevent text wrapping */
-  display: inline-block; /* Behave as inline elements for spacing */
-  padding: 8px 12px; /* Consistent button padding */
-  margin: 0; /* Remove unwanted gaps */
-  flex-shrink: 0; /* Prevent buttons from shrinking */
+  width: max-content;
+  white-space: nowrap;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  /* Remove any margins if present to rely solely on the gap */
+  margin: 0;
 }
 
 /* News Articles: Ensure scrollbar appears */

@@ -232,9 +232,13 @@
       parentContainer.insertBefore(citeBox, whatsHappeningBox);
 
       // Fetch topic data from your Flask API.
-      fetch('http://192.168.0.191:8000/analyse_post', {
+      fetch('https://citethis-api-142573238783.australia-southeast1.run.app/analyse_post', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        mode: 'cors', // ensure CORS mode is enabled
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Force-Preflight': 'true'  // custom header to trigger a preflight request
+        },
         body: JSON.stringify({ text: tweetDiv.outerHTML })
       })
       .then(response => response.json())
@@ -253,6 +257,7 @@
       });
     });
   }
+
 
   // Monitor URL changes for SPA navigation.
   setInterval(() => {
