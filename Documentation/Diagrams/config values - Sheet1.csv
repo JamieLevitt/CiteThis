@@ -1,0 +1,23 @@
+db_config,
+host,environment variable
+user,"""postgres"""
+password,environment variable
+name,"""postgres"""
+trends_table,"""trending_topics"""
+entities_table,"""entities"""
+articles_table,"""articles"""
+trend_entity_link_table,"""links_trending_topics_to_entities"""
+trend_article_link_table,"""links_trending_topics_to_article_urls"""
+data_config,
+trend_lifespan,7
+article_lifespan,2
+entity_lifespan,61
+collection_config,
+news_api_key,environment variable
+google_genai_key,environment variable
+fetch_trends_url,"""https://trends.google.com/trending?geo=US&hl=en-US&category=14&hours=48"""
+trends_count,10
+excluded_news_sources,"""indiatoday.in"""
+trend_name_selector,"""div.mZ3RIc"""
+trend_started_selector,"""div.vdw3Ld"""
+news_raw_dt_format,"""%Y-%m-%d %H:%M:%S"""
