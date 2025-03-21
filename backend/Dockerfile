@@ -6,6 +6,8 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
+RUN pip install pyppeteer==0.2.2
+
 RUN pip install websockets==13.0
 
 RUN apt-get update && apt-get install -y \

@@ -1,11 +1,20 @@
 from structs.ai import AiFunction
 
 class GetTrendEntities(AiFunction):
+    """
+    AI function to extract named entities from a trending topic using web search.
+    """
+
     def __init__(self, obj_id:str):
+        """
+        Initializes the function with the entity ID.
+        
+        :param obj_id: The entity name or identifier.
+        """
         super().__init__(obj_id)
         
     prompt = lambda cls: f"""
-        Using web search, work out and extract all named entities from the following topic: "{cls.obj_id}".
+        Using web search, work out and extract up to 5 of the most important named entities from the following topic: "{cls.obj_id}".
         
         Classify them as:
             - People
@@ -27,7 +36,16 @@ class GetTrendEntities(AiFunction):
         """
 
 class GetEntityMetadata(AiFunction):
+    """
+    AI function to retrieve metadata about an entity, including keywords, Wikipedia URL, and Twitter handle.
+    """
+
     def __init__(self, obj_id:str):
+        """
+        Initializes the function with the entity ID.
+        
+        :param obj_id: The entity name or identifier.
+        """
         super().__init__(obj_id)
         
     prompt = lambda cls: f"""

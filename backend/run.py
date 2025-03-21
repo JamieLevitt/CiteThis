@@ -1,3 +1,5 @@
+# For hosting API locally (NOT USED BY GOOGLE CLOUD RUN)
+
 from core import app
 import logging
 

@@ -1,29 +1,49 @@
-from fastapi import APIRouter, Header, HTTPException, Depends
+from fastapi import APIRouter
 
-from google.oauth2 import id_token
-from google.auth.transport import requests as google_requests
 from core.tools import update_trends, update_articles, purge_dead_entries
 
+# Create an API router for task-related endpoints
 tasks_router = APIRouter()
 
+# Called daily by Google Cloud Scheduler
 @tasks_router.get("/update_trends")
-async def async_update_trends():
+async def async_update_trends() -> dict:
+    """
+    Asynchronously update trending topics.
+    
+    Returns:
+        dict: Status message indicating success or failure.
+    """
     try:
         await update_trends()
         return {"status": "trends updated"}
     except Exception as e:
         return {"error": str(e)}
 
+# Called daily by Google Cloud Scheduler
 @tasks_router.get("/update_articles")
-def update_articles_task():
+def update_articles_task() -> dict:
+    """
+    Update articles by fetching new data.
+    
+    Returns:
+        dict: Status message indicating success or failure.
+    """
     try:
         update_articles()
         return {"status": "articles updated"}
     except Exception as e:
         return {"error": str(e)}
 
-@tasks_router.get("/tasks/purge")
-def purge_task():
+# Called daily by Google Cloud Scheduler
+@tasks_router.get("/purge")
+def purge_task() -> dict:
+    """
+    Purge outdated or invalid entries from the system.
+    
+    Returns:
+        dict: Status message indicating success or failure.
+    """
     try:
         purge_dead_entries()
         return {"status": "purge completed"}

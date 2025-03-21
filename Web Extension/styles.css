@@ -1,0 +1,189 @@
+/* Custom Properties */
+@property --highlight-hue {
+  syntax: "<integer>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/* Box & Layout Styles */
+#citethis-box {
+  font-family: 'Courier New', Courier, monospace;
+  height: fit-content;
+  min-height: 150px;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Titles */
+.cite-title {
+  font-size: 20px;
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid hsl(0, 0%, 80%);
+  border-top-color: hsl(0, 0%, 20%);
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+  margin: 20px auto;
+}
+
+/* Status Message */
+.status-message {
+  text-align: center;
+  padding: 20px;
+  color: hsl(0, 0%, 45%);
+  font-style: italic;
+}
+
+/* Citation Items Container */
+.cite-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cite-items:has(.status-message),
+.cite-items:has(.loading-spinner) {
+  justify-content: center;
+  min-height: 100px;
+}
+
+/* Topic Titles and Details */
+.topic-title {
+  position: relative;
+  padding: 8px;
+  font-size: 15px;
+  text-transform: uppercase;
+  transition: font-size 0.5s ease;
+}
+
+.topic-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  cursor: default;
+  font-size: 18px;
+}
+
+/* Expanded State */
+.expanded > .topic-title {
+  font-size: 20px;
+}
+
+.expanded > .topic-details {
+  max-height: 500px;
+}
+
+/* Topic Button Container */
+.topic-button-container {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 0 8px 16px 0;
+  width: calc(100% - 16px);
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+.topic-button-container:not(.expanded):hover {
+  background-color: hsl(var(--highlight-hue), 60%, 70%);
+}
+
+.topic-button-container.expanded {
+  background-color: hsl(var(--highlight-hue), 60%, 70%);
+}
+
+/* Highlighted Tweet Words */
+.highlighted {
+  background-color: hsl(var(--highlight-hue), 60%, 80%);
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* Scrollable Items Container */
+.items-container.scrollable {
+  display: flex;
+  gap: 4px;
+  padding: 10px;
+}
+
+/* Horizontal Buttons in Scrollable Container */
+.items-container.scrollable.hz-btns {
+  flex-direction: row;
+  overflow-x: scroll;
+  scrollbar-color: hsl(var(--highlight-hue), 60%, 60%) transparent;
+  scrollbar-width: thin;
+  width: 100%;
+  max-height: 64px;
+}
+
+.items-container.scrollable.hz-btns > .citethis-link-button {
+  width: fit-content;
+  white-space: nowrap;
+  text-align: center;
+  margin: 0 8px 8px 0;
+}
+
+.items-container.scrollable.hz-btns > .citethis-link-button:nth-child(even) {
+  order: 2;
+}
+
+/* Vertical Buttons in Scrollable Container */
+.items-container.scrollable.vr-btns {
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-color: hsl(var(--highlight-hue), 60%, 60%) transparent;
+  scrollbar-width: thin;
+  align-content: stretch;
+  width: calc(100% - 20px);
+  max-height: 160px; /* Ensures 4 buttons fit at once */
+}
+
+.items-container.scrollable.vr-btns > .citethis-link-button {
+  min-width: fit-content;
+  text-align: left;
+}
+
+/* Citation Link Button */
+.citethis-link-button {
+  background-color: hsl(var(--highlight-hue), 60%, 60%);
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 14px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.citethis-link-button:hover {
+  background-color: hsl(var(--scrollbar-hue), 60%, 55%);
+}
+
+/* Detail Section */
+.detail-section {
+  padding-bottom: 15px;
+}
+
+.detail-section > h4 {
+  margin: 0 0 4px 0;
+  padding: 4px;
+}
