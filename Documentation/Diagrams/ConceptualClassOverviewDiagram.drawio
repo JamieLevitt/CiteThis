@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0" version="26.1.1">
   <diagram name="Page-1" id="KB78nba-Hb2z6hXjGzMv">
-    <mxGraphModel dx="962" dy="715" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="378" dy="455" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -95,11 +95,6 @@
         </mxCell>
         <mxCell id="m1CjezaMIKNChpOTWR7g-93" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="m1CjezaMIKNChpOTWR7g-62" target="m1CjezaMIKNChpOTWR7g-71" edge="1">
           <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="m1CjezaMIKNChpOTWR7g-95" value="&lt;font face=&quot;Courier New&quot;&gt;INHERITED BY&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="m1CjezaMIKNChpOTWR7g-93" vertex="1" connectable="0">
-          <mxGeometry x="-0.7958" y="-2" relative="1" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
         </mxCell>
         <mxCell id="m1CjezaMIKNChpOTWR7g-64" value="&lt;div&gt;&lt;font face=&quot;Courier New&quot; style=&quot;font-size: 10px;&quot;&gt;&amp;lt;&amp;lt;dataType&amp;gt;&amp;gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font size=&quot;1&quot; face=&quot;Courier New&quot;&gt;PostBody&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot; size=&quot;1&quot;&gt;{class}&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="150" y="351" width="120" height="60" as="geometry" />
@@ -199,6 +194,9 @@
         </mxCell>
         <mxCell id="lXGh-ZLCWr-93TRn4ImD-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="m1CjezaMIKNChpOTWR7g-62" target="lXGh-ZLCWr-93TRn4ImD-1">
           <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lXGh-ZLCWr-93TRn4ImD-3" value="&lt;font face=&quot;Courier New&quot;&gt;INHERITED BY&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="342" y="325.18181818181824" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
