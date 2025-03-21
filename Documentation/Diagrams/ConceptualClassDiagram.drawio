@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0" version="26.1.1">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1347" dy="1001" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="624" dy="751" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -116,85 +116,46 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-40" value="&lt;&lt;dataType&gt;&gt;&#xa;EntityStruct&#xa;{class}" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=60;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontFamily=Courier New;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="340" y="380" width="300" height="360" as="geometry">
+          <mxGeometry x="340" y="380" width="300" height="340" as="geometry">
             <mxRectangle x="220" y="80" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <UserObject label="i table = db_config.entities_table" link="https://github.com/JamieLevitt/CiteThis/blob/4326643cd78c587e9b6cc8a23586380e8a52e17f/Documentation/Config_Values/db_config.csv#L6" id="gIUdPoAB92ztzNn0mDoF-41">
-          <mxCell style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;fontColor=#0000EE;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-40">
-            <mxGeometry y="60" width="300" height="20" as="geometry" />
-          </mxCell>
-        </UserObject>
-        <mxCell id="gIUdPoAB92ztzNn0mDoF-61" value="i id_alias = &quot;id&quot;&lt;br&gt;i excluded_fields = []&lt;br&gt;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;html=1;spacingTop=-5;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-40">
-          <mxGeometry y="80" width="300" height="30" as="geometry" />
-        </mxCell>
-        <UserObject label="&lt;font style=&quot;color: rgb(0, 0, 238);&quot;&gt;i lifespan = data_config.entity_lifespan&lt;/font&gt;" link="https://github.com/JamieLevitt/CiteThis/blob/4326643cd78c587e9b6cc8a23586380e8a52e17f/Documentation/Config_Values/data_config%2C.csv#L3" id="gIUdPoAB92ztzNn0mDoF-62">
-          <mxCell style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;html=1;spacingTop=-7;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-40">
-            <mxGeometry y="110" width="300" height="20" as="geometry" />
-          </mxCell>
-        </UserObject>
-        <mxCell id="gIUdPoAB92ztzNn0mDoF-60" value="i lifespan_attr = &quot;last_linked&quot;&#xa;&#xa;i id: string&#xa;&#xa;+ keywords: list[string]&#xa;+ wiki_url: string&#xa;+ twitter_url: string&#xa;+ last_linked: datetime.date = None" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;spacingTop=-13;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-40">
-          <mxGeometry y="130" width="300" height="110" as="geometry" />
+        <mxCell id="gIUdPoAB92ztzNn0mDoF-60" value="i table = db_config.entities_tablei id_alias = &quot;id&quot;&#xa;i excluded_fields = []&#xa;i lifespan = data_config.entity_lifespan&#xa;i lifespan_attr = &quot;last_linked&quot;&#xa;&#xa;i id: string&#xa;&#xa;+ keywords: list[string]&#xa;+ wiki_url: string&#xa;+ twitter_url: string&#xa;+ last_linked: datetime.date = None" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;spacingTop=0;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-40">
+          <mxGeometry y="60" width="300" height="160" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-42" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-40">
-          <mxGeometry y="240" width="300" height="8" as="geometry" />
+          <mxGeometry y="220" width="300" height="8" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-43" value="i is_in_db(): bool&#xa;i load_from_db(): EntityStruct&#xa;i load_all_from_db(): list[EntityStruct]&#xa;i purge_db(): void&#xa;&#xa;i get_table_vars(): tuple&#xa;i insert_into_db(): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-40">
-          <mxGeometry y="248" width="300" height="112" as="geometry" />
+          <mxGeometry y="228" width="300" height="112" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-64" value="&lt;&lt;dataType&gt;&gt;&#xa;ArticleStruct&#xa;{class}" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=60;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontFamily=Courier New;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="650" y="380" width="310" height="360" as="geometry">
+          <mxGeometry x="650" y="380" width="310" height="330" as="geometry">
             <mxRectangle x="220" y="80" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <UserObject label="i table = db_config.articles_table" link="https://github.com/JamieLevitt/CiteThis/blob/4326643cd78c587e9b6cc8a23586380e8a52e17f/Documentation/Config_Values/db_config.csv#L7" id="gIUdPoAB92ztzNn0mDoF-65">
-          <mxCell style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;fontColor=#0000EE;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-64">
-            <mxGeometry y="60" width="310" height="20" as="geometry" />
-          </mxCell>
-        </UserObject>
-        <mxCell id="gIUdPoAB92ztzNn0mDoF-66" value="i id_alias = &quot;url&quot;&lt;br&gt;i excluded_fields = []" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;html=1;spacingTop=-5;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-64">
-          <mxGeometry y="80" width="310" height="30" as="geometry" />
-        </mxCell>
-        <UserObject label="&lt;font style=&quot;color: rgb(0, 0, 238);&quot;&gt;i lifespan = data_config.article_lifespan&lt;/font&gt;" link="https://github.com/JamieLevitt/CiteThis/blob/4326643cd78c587e9b6cc8a23586380e8a52e17f/Documentation/Config_Values/data_config%2C.csv#L2" id="gIUdPoAB92ztzNn0mDoF-67">
-          <mxCell style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;html=1;spacingTop=-7;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-64">
-            <mxGeometry y="110" width="310" height="20" as="geometry" />
-          </mxCell>
-        </UserObject>
-        <mxCell id="gIUdPoAB92ztzNn0mDoF-68" value="i lifespan_attr = &quot;last_linked&quot;&#xa;&#xa;i id: string&#xa;&#xa;+ source: string&#xa;+ published_date: datetime.date&#xa;+ last_linked: datetime.date = None" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;spacingTop=-13;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-64">
-          <mxGeometry y="130" width="310" height="100" as="geometry" />
+        <mxCell id="gIUdPoAB92ztzNn0mDoF-68" value="i table = db_config.articles_tablei id_alias = &quot;url&quot;&#xa;i excluded_fields = []&#xa;i lifespan_attr = &quot;last_linked&quot;&#xa;i lifespan = data_config.article_lifespan&#xa;&#xa;i id: string&#xa;&#xa;+ source: string&#xa;+ published_date: datetime.date&#xa;+ last_linked: datetime.date = None" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;spacingTop=0;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-64">
+          <mxGeometry y="60" width="310" height="150" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-69" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-64">
-          <mxGeometry y="230" width="310" height="8" as="geometry" />
+          <mxGeometry y="210" width="310" height="8" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-70" value="i is_in_db(): bool&#xa;i load_from_db(): ArticleStruct&#xa;i load_all_from_db(): list[ArticleStruct]&#xa;i purge_db(): void&#xa;&#xa;i get_table_vars(): tuple&#xa;i insert_into_db(): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-64">
-          <mxGeometry y="238" width="310" height="112" as="geometry" />
+          <mxGeometry y="218" width="310" height="112" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-71" value="&lt;&lt;dataType&gt;&gt;&#xa;TrendStruct&#xa;{class}" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=60;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontFamily=Courier New;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="10" y="380" width="320" height="460" as="geometry">
+          <mxGeometry x="10" y="380" width="320" height="440" as="geometry">
             <mxRectangle x="220" y="80" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <UserObject label="i table = db_config.trends_table" link="https://github.com/JamieLevitt/CiteThis/blob/4326643cd78c587e9b6cc8a23586380e8a52e17f/Documentation/Config_Values/db_config.csv#L5" id="gIUdPoAB92ztzNn0mDoF-72">
-          <mxCell style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;fontColor=#0000EE;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-71">
-            <mxGeometry y="60" width="320" height="20" as="geometry" />
-          </mxCell>
-        </UserObject>
-        <mxCell id="gIUdPoAB92ztzNn0mDoF-73" value="i id_alias = &quot;topic&quot;&lt;br&gt;i excluded_fields = [&quot;entities&quot;, &quot;articles&quot;]" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;html=1;spacingTop=-5;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-71">
-          <mxGeometry y="80" width="320" height="30" as="geometry" />
-        </mxCell>
-        <UserObject label="&lt;font style=&quot;color: rgb(0, 0, 238);&quot;&gt;i lifespan = data_config.trend_lifespan&lt;/font&gt;" link="https://github.com/JamieLevitt/CiteThis/blob/4326643cd78c587e9b6cc8a23586380e8a52e17f/Documentation/Config_Values/data_config%2C.csv#L1" id="gIUdPoAB92ztzNn0mDoF-74">
-          <mxCell style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;html=1;spacingTop=-7;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-71">
-            <mxGeometry y="110" width="320" height="20" as="geometry" />
-          </mxCell>
-        </UserObject>
-        <mxCell id="gIUdPoAB92ztzNn0mDoF-75" value="i lifespan_attr = &quot;started_trending&quot;&#xa;&#xa;i id: string&#xa;&#xa;+ started_trending: datetime.date = None&#xa;+ entities: list[EntityStruct]&#xa;+ articles: list[ArticleStruct]" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;spacingTop=-13;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-71">
-          <mxGeometry y="130" width="320" height="110" as="geometry" />
+        <mxCell id="gIUdPoAB92ztzNn0mDoF-75" value="i table = db_config.trends_table&#xa;i id_alias = &quot;topic&quot;&#xa;i excluded_fields = [&quot;entities&quot;, &quot;articles&quot;]&#xa;i lifespan_attr = &quot;started_trending&quot;&#xa;i lifespan = data_config.trend_lifespan&#xa;&#xa;i id: string&#xa;&#xa;+ started_trending: datetime.date = None&#xa;+ entities: list[EntityStruct]&#xa;+ articles: list[ArticleStruct]" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;spacingTop=0;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-71">
+          <mxGeometry y="60" width="320" height="160" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-76" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-71">
-          <mxGeometry y="240" width="320" height="8" as="geometry" />
+          <mxGeometry y="220" width="320" height="8" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-77" value="i is_in_db(): bool&#xa;i load_from_db(): TrendStruct&#xa;i load_all_from_db(): list[TrendStruct]&#xa;i purge_db(): void&#xa;&#xa;i get_table_vars(): tuple&#xa;i insert_into_db(): void&#xa;&#xa;/ load_all_with_kw(): list[TrendStruct]&#xa;/ get_topic_entities(): list[EntityStruct]&#xa;/ get_topic_articles(): list[ArticleStruct]&#xa;&#xa;+ affirm_db_entity_link(): void&#xa;+ affirm_db_article_link(): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-71">
-          <mxGeometry y="248" width="320" height="212" as="geometry" />
+          <mxGeometry y="228" width="320" height="212" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-94" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="gIUdPoAB92ztzNn0mDoF-92" target="gIUdPoAB92ztzNn0mDoF-64">
           <mxGeometry relative="1" as="geometry" />
@@ -296,38 +257,32 @@
             <mxRectangle x="220" y="80" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="gIUdPoAB92ztzNn0mDoF-125" value="i prompt: string" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;fontColor=#0000EE;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-124">
-          <mxGeometry y="60" width="301" height="20" as="geometry" />
-        </mxCell>
-        <UserObject label="&#xa;i obj_id: string" link="https://github.com/JamieLevitt/CiteThis/blob/c1d03b64c0a138fa8f9dc9e429e70ad07d2a77c0/Backend/data/aitools/google_genai_funcs.py#L16-L36" linkTarget="_blank" id="gIUdPoAB92ztzNn0mDoF-139">
+        <UserObject label="i prompt: string&#xa;&#xa;i obj_id: string" link="https://github.com/JamieLevitt/CiteThis/blob/c1d03b64c0a138fa8f9dc9e429e70ad07d2a77c0/Backend/data/aitools/google_genai_funcs.py#L16-L36" linkTarget="_blank" id="gIUdPoAB92ztzNn0mDoF-139">
           <mxCell style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;spacingTop=-4;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-124">
-            <mxGeometry y="80" width="301" height="40" as="geometry" />
+            <mxGeometry y="60" width="301" height="50" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-126" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-124">
-          <mxGeometry y="120" width="301" height="8" as="geometry" />
+          <mxGeometry y="110" width="301" height="8" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-127" value="i stringed(): string" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-124">
-          <mxGeometry y="128" width="301" height="32" as="geometry" />
+          <mxGeometry y="118" width="301" height="32" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-128" value="&lt;&lt;entity&gt;&gt;&#xa;AIFunction&#xa;{class}" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=60;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;fillColor=#fff2cc;strokeColor=#d6b656;fontFamily=Courier New;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="330" y="1489" width="300" height="160" as="geometry">
             <mxRectangle x="220" y="80" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <UserObject label="i prompt = see code&#xa;&#xa;" link="https://github.com/JamieLevitt/CiteThis/blob/c1d03b64c0a138fa8f9dc9e429e70ad07d2a77c0/Backend/data/aitools/google_genai_funcs.py#L51-L75" id="gIUdPoAB92ztzNn0mDoF-129">
-          <mxCell style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;fontColor=#0000EE;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-128">
-            <mxGeometry y="60" width="300" height="20" as="geometry" />
+        <UserObject label="i prompt: string&#xa;&#xa;i obj_id: string" link="https://github.com/JamieLevitt/CiteThis/blob/c1d03b64c0a138fa8f9dc9e429e70ad07d2a77c0/Backend/data/aitools/google_genai_funcs.py#L16-L36" linkTarget="_blank" id="gIUdPoAB92ztzNn0mDoF-146">
+          <mxCell style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;spacingTop=-4;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-128">
+            <mxGeometry y="60" width="300" height="50" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="gIUdPoAB92ztzNn0mDoF-140" value="&#xa;i obj_id: string" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;spacingTop=-4;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-128">
-          <mxGeometry y="80" width="300" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-130" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-128">
-          <mxGeometry y="120" width="300" height="8" as="geometry" />
+          <mxGeometry y="110" width="300" height="8" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-131" value="i stringed(): string" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Courier New;" vertex="1" parent="gIUdPoAB92ztzNn0mDoF-128">
-          <mxGeometry y="128" width="300" height="32" as="geometry" />
+          <mxGeometry y="118" width="300" height="32" as="geometry" />
         </mxCell>
         <mxCell id="gIUdPoAB92ztzNn0mDoF-135" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="gIUdPoAB92ztzNn0mDoF-132" target="gIUdPoAB92ztzNn0mDoF-128">
           <mxGeometry relative="1" as="geometry" />
