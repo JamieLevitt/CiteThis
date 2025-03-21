@@ -1,0 +1,9 @@
+host,environment variable
+user,"""postgres"""
+password,environment variable
+name,"""postgres"""
+trends_table,"""trending_topics"""
+entities_table,"""entities"""
+articles_table,"""articles"""
+trend_entity_link_table,"""links_trending_topics_to_entities"""
+trend_article_link_table,"""links_trending_topics_to_article_urls"""
