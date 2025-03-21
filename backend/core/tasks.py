@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from core.tools import update_trends, update_articles, purge_dead_entries
 
@@ -7,7 +7,7 @@ tasks_router = APIRouter()
 
 # Called daily by Google Cloud Scheduler
 @tasks_router.get("/update_trends")
-async def async_update_trends() -> dict:
+async def update_trends_task() -> dict:
     """
     Asynchronously update trending topics.
     
@@ -18,13 +18,13 @@ async def async_update_trends() -> dict:
         await update_trends()
         return {"status": "trends updated"}
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code = 500, detail = e)
 
 # Called daily by Google Cloud Scheduler
 @tasks_router.get("/update_articles")
 def update_articles_task() -> dict:
     """
-    Update articles by fetching new data.
+    Update trends' articles to latest available.
     
     Returns:
         dict: Status message indicating success or failure.
@@ -33,13 +33,13 @@ def update_articles_task() -> dict:
         update_articles()
         return {"status": "articles updated"}
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code = 500, detail = e)
 
 # Called daily by Google Cloud Scheduler
 @tasks_router.get("/purge")
 def purge_task() -> dict:
     """
-    Purge outdated or invalid entries from the system.
+    Purge outdated entries from the system.
     
     Returns:
         dict: Status message indicating success or failure.
@@ -48,4 +48,4 @@ def purge_task() -> dict:
         purge_dead_entries()
         return {"status": "purge completed"}
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code = 500, detail = e)

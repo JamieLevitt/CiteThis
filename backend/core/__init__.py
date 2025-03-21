@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 @app.post("/analyse_post", response_model = APIResponse)
-def analyse_post(post_body: PostBody) -> dict:
+def analyse_post(post_body: PostBody):
     """
     Analyze a given post by extracting relevant tags from its text.
     
