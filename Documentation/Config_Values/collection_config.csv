@@ -1,0 +1,8 @@
+news_api_key,environment variable
+google_genai_key,environment variable
+fetch_trends_url,"""https://trends.google.com/trending?geo=US&hl=en-US&category=14&hours=48"""
+trends_count,10
+excluded_news_sources,"""indiatoday.in"""
+trend_name_selector,"""div.mZ3RIc"""
+trend_started_selector,"""div.vdw3Ld"""
+news_raw_dt_format,"""%Y-%m-%d %H:%M:%S"""
