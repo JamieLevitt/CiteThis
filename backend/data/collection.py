@@ -51,7 +51,7 @@ async def get_trends_raw() -> list[dict]:
 
 def get_trend_entities_raw(trend_id: str) -> dict | None:
     """
-    Retrieves AI-generated entity data related to a trend.
+    Retrieves entities present in the trend.
     
     Args:
         trend_id (str): The ID of the trend.
