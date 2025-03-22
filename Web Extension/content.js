@@ -317,6 +317,11 @@
     });
   };
 
+  window.addEventListener('locationchange', () => {
+    currentUrl = location.href;
+    initCiteThis();
+  });
+
   // Monitor URL changes for Single Page Application (SPA) navigation
   setInterval(() => {
     // If the URL has changed since the last check
